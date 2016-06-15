@@ -364,10 +364,22 @@ void AP_Baro::init(void)
     _num_drivers = 1;
 #endif
 
+//For some reason #if APM_BUILD_TYPE(APM_BUILD_ArduSub) doesn't work here
+//#if APM_BUILD_TYPE(APM_BUILD_ArduSub)
+#ifdef HAL_BARO_WATER_DEFAULT //check this instead of build_type
+ #if HAL_BARO_WATER_DEFAULT == HAL_BARO_MS5611_I2C
+    drivers[1] = new AP_Baro_MS5611(*this,
+        std::move(hal.i2c_mgr->get_device(HAL_BARO_MS5611_I2C_BUS, HAL_BARO_MS5611_I2C_ADDR)),
+        HAL_BARO_MS5611_USE_TIMER);
+    _num_drivers = 2;
+ #endif
+#endif
+
     if (_num_drivers == 0 || _num_sensors == 0 || drivers[0] == NULL) {
         AP_HAL::panic("Baro: unable to initialise driver");
     }
 }
+//#endif
 
 
 /*
