@@ -338,6 +338,10 @@ void AP_Baro::init(void)
         std::move(hal.spi->get_device(HAL_BARO_MS5611_NAME)),
         true);
     _num_drivers = 1;
+    drivers[1] = new AP_Baro_MS5611(*this,
+        std::move(hal.i2c_mgr->get_device(HAL_BARO_MS5611_I2C_BUS, HAL_BARO_MS5611_I2C_ADDR)),
+        HAL_BARO_MS5611_USE_TIMER);
+    _num_drivers = 2;
 #elif HAL_BARO_DEFAULT == HAL_BARO_MS5607_I2C
     drivers[0] = new AP_Baro_MS5607(*this,
         std::move(hal.i2c_mgr->get_device(HAL_BARO_MS5607_I2C_BUS, HAL_BARO_MS5607_I2C_ADDR)),
