@@ -70,7 +70,6 @@
 #include <AP_Vehicle/AP_Vehicle.h>         // needed for AHRS build
 #include <AP_InertialNav/AP_InertialNav.h>     // ArduPilot Mega inertial navigation library
 #include <AC_WPNav/AC_WPNav.h>           // Waypoint navigation library
-#include <AC_WPNav/AC_Circle.h>          // circle navigation library
 #include <AP_Declination/AP_Declination.h>     // ArduPilot Mega Declination Helper Library
 #include <AC_Fence/AC_Fence.h>           // Fence library
 
@@ -320,9 +319,6 @@ private:
     // Guided
     GuidedMode guided_mode;  // controls which controller is run (pos or vel)
 
-    // Circle
-    bool circle_pilot_yaw_override; // true if pilot is overriding yaw
-
     // SIMPLE Mode
     // Used to track the orientation of the Sub for Simple mode. This value is reset at each arming
     // or in SuperSimple mode when the Sub leaves a 20m radius from home.
@@ -416,7 +412,6 @@ private:
 #endif
 
     AC_WPNav wp_nav;
-    AC_Circle circle_nav;
 
     // Performance monitoring
     int16_t pmTest1;
@@ -608,9 +603,6 @@ private:
     void auto_land_start();
     void auto_land_start(const Vector3f& destination);
     void auto_land_run();
-    void auto_circle_movetoedge_start(const Location_Class &circle_center, float radius_m);
-    void auto_circle_start();
-    void auto_circle_run();
     void auto_nav_guided_start();
     void auto_nav_guided_run();
     bool auto_loiter_start();
@@ -620,8 +612,6 @@ private:
     void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, int8_t direction, uint8_t relative_angle);
     void set_auto_yaw_roi(const Location &roi_location);
     float get_auto_heading(void);
-    bool circle_init(bool ignore_checks);
-    void circle_run();
     bool guided_init(bool ignore_checks);
     void guided_pos_control_start();
     void guided_vel_control_start();
@@ -791,7 +781,6 @@ private:
     void do_nav_wp(const AP_Mission::Mission_Command& cmd);
     void do_land(const AP_Mission::Mission_Command& cmd);
     void do_loiter_unlimited(const AP_Mission::Mission_Command& cmd);
-    void do_circle(const AP_Mission::Mission_Command& cmd);
     void do_loiter_time(const AP_Mission::Mission_Command& cmd);
     void do_spline_wp(const AP_Mission::Mission_Command& cmd);
 #if NAV_GUIDED == ENABLED
@@ -814,7 +803,6 @@ private:
     void do_gripper(const AP_Mission::Mission_Command& cmd);
 #endif
     bool verify_nav_wp(const AP_Mission::Mission_Command& cmd);
-    bool verify_circle(const AP_Mission::Mission_Command& cmd);
     bool verify_spline_wp(const AP_Mission::Mission_Command& cmd);
 #if NAV_GUIDED == ENABLED
     bool verify_nav_guided_enable(const AP_Mission::Mission_Command& cmd);
